@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Juego de memoria</title>
+</head>
+
+<body>
+    <div class="contenedorGeneral">
+        <div class="contenedorUno">
+            <div class="contact-section">
+                <h1 class="section-header"><span class="content-header wow fadeIn " data-wow-delay="0.2s"
+                        data-wow-duration="2s"></span>Ingresa tus datos y empieza a jugar, vence tu record personal</h1>
+                <div class="container col-md-6">
+                    <form>
+                        <div class="col-md container form-line">
+                            <div class="form-group">
+                                <label for="exampleInputUsername">Nombre</label>
+                                <input type="text" class="form-control" id="inputNombre" placeholder="Ingresa tu Nombre"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail">Apellido</label>
+                                <input type="text" class="form-control" id="inputApellido"
+                                    placeholder="Ingresa tu Apellido" required>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-default submit" id="botonVerificar"><i
+                                        class="fa fa-paper-plane" aria-hidden="true"></i>Verificar Usuario</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="contenedorDos">
+            <h2> Marcador: <span id="resultado"></span></h2>
+            <h2> Intentos: <span id="conteoIntentos"></span></h2>
+            <h2> Record: <span id="recordPersonal"></span></h2>
+            <section class="contenedorJuego">
+                <div class="grilla">
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+
+</html>
