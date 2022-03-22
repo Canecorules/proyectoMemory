@@ -2,7 +2,7 @@ class Usuario {
     constructor(nombre, apellido) {
         this.nombre = nombre
         this.apellido = apellido
-        this.recordIntentos = []
+        this.recordIntentos= -1
     }
 }
 
@@ -89,26 +89,74 @@ let idTarjetaElegida = []
 let tarjetasGanadoras = []
 let tarjetasEquivocadas = []
 
-//crear tablero
 
+function infoStorage (){
+    let listaUsuario = JSON.parse(localStorage.getItem("usuarioStorage"))
+    if(listaUsuario==null){
+        return []
+    }
+    return listaUsuario
+}
+
+function modificarStorage (lista){
+    localStorage.setItem("usuarioStorage", JSON.stringify(lista)) 
+}
+
+function verificarRecord(nuevoRecord, nombreUsuario){
+    let listastorage = infoStorage()
+    if(buscarUsuario(nombreUsuario, listastorage)==true){
+        for(const usuario of listastorage){
+            if(usuario.nombre==nombreUsuario){
+                if(usuario.recordIntentos==-1){
+                    usuario.recordIntentos=nuevoRecord
+                    modificarStorage(listastorage)
+                }else if(usuario.recordIntentos>nuevoRecord){
+                    usuario.recordIntentos=nuevoRecord
+                    modificarStorage(listastorage)
+                }
+            }
+        }
+    }
+}
+
+function buscarUsuario (nombreUsuario, lista){
+    for ( const usuario of lista){
+        if(usuario.nombre==nombreUsuario){
+            return true
+        }
+    }
+    return false
+}
+
+function mejorRecord (nombre){
+    let listastorage = infoStorage()
+    let record
+    for(const usuario of listastorage){
+        if(usuario.nombre==nombre){
+            record= usuario.recordIntentos
+        }
+    }
+    return record
+}
+
+//verificar si el usuario existe
 function verificarUsuario() {
     let boton = document.querySelector("#botonVerificar")
     boton.addEventListener("click", () => {
         let nombre = document.getElementById("inputNombre").value.toUpperCase();
         let apellido = document.getElementById("inputApellido").value.toUpperCase(); 
-        JSON.parse(localStorage.getItem("usuarioStorage"))       
-        let verificacion = listaUsuario.includes(nombre)
-        console.log(verificacion)
+        let storageList = infoStorage()           
+        let verificacion = buscarUsuario(nombre, storageList)       
         if (!verificacion) {
-            listaUsuario.push(new Usuario(nombre, apellido));
-            localStorage.setItem("usuarioStorage", JSON.stringify(listaUsuario))                    
+            storageList.push(new Usuario(nombre, apellido));
+            modificarStorage(storageList)                   
             crearTablero()
         } else {
             crearTablero()
         }
     })
 }   
-
+//crear tablero
 function crearTablero() {
     for (let i = 0; i < imagenesArray.length; i++) {
         const tarjeta = document.createElement('img')
@@ -121,7 +169,7 @@ function crearTablero() {
 }
 
 //verificar concuerda
-function verificarQueConcuerda() {
+function verificarQueConcuerda() {    
     const tarjetas = document.querySelectorAll('img')
     const opcionUnoId = idTarjetaElegida[0]
     const opcionDosId = idTarjetaElegida[1]
@@ -145,23 +193,16 @@ function verificarQueConcuerda() {
     resultadoJuego.textContent = tarjetasGanadoras.length
     intentos.textContent = tarjetasGanadoras.length + tarjetasEquivocadas.length
     let conteoIntentos = tarjetasGanadoras.length + tarjetasEquivocadas.length
+    let name = document.getElementById("inputNombre").value.toUpperCase();    
     if (tarjetasGanadoras.length === imagenesArray.length / 2) {
         resultadoJuego.textContent = 'Felicitaciones! Has encontrado todas la parejas!'
-        listaUsuario[0].recordIntentos.push(conteoIntentos)
-        localStorage.setItem("usuarioStorage", JSON.stringify(listaUsuario))        
-        // let recordFinal = listaUsuario[0].recordIntentos.sort((a, b) => a - b)
-        // record.textContent = recordFinal[0]
-        let recordFinal = JSON.parse(localStorage.getItem("usuarioStorage"))
-        recordFinal.forEach(element => {
-            // let personalRecord = listaUsuario[0].recordIntentos.sort((a, b) => a - b)
-            record.innerHTML = `${element.recordIntentos}`
-        });
-
+        verificarRecord(conteoIntentos, name)        
+        record.innerHTML = `${mejorRecord(name)}`
     }
 }
 
 //Voltea tu tarjeta
-function voltearTarjeta() {
+function voltearTarjeta() {    
     let idTarjeta = this.getAttribute('id')
     tarjetaElegida.push(imagenesArray[idTarjeta].profesion)
     idTarjetaElegida.push(idTarjeta)
