@@ -2,7 +2,7 @@ class Usuario {
     constructor(nombre, apellido) {
         this.nombre = nombre
         this.apellido = apellido
-        this.recordIntentos= -1
+        this.recordIntentos = -1
     }
 }
 
@@ -90,28 +90,28 @@ let tarjetasGanadoras = []
 let tarjetasEquivocadas = []
 
 
-function infoStorage (){
+function infoStorage() {
     let listaUsuario = JSON.parse(localStorage.getItem("usuarioStorage"))
-    if(listaUsuario==null){
+    if (listaUsuario == null) {
         return []
     }
     return listaUsuario
 }
 
-function modificarStorage (lista){
-    localStorage.setItem("usuarioStorage", JSON.stringify(lista)) 
+function modificarStorage(lista) {
+    localStorage.setItem("usuarioStorage", JSON.stringify(lista))
 }
 
-function verificarRecord(nuevoRecord, nombreUsuario){
+function verificarRecord(nuevoRecord, nombreUsuario) {
     let listastorage = infoStorage()
-    if(buscarUsuario(nombreUsuario, listastorage)==true){
-        for(const usuario of listastorage){
-            if(usuario.nombre==nombreUsuario){
-                if(usuario.recordIntentos==-1){
-                    usuario.recordIntentos=nuevoRecord
+    if (buscarUsuario(nombreUsuario, listastorage) == true) {
+        for (const usuario of listastorage) {
+            if (usuario.nombre == nombreUsuario) {
+                if (usuario.recordIntentos == -1) {
+                    usuario.recordIntentos = nuevoRecord
                     modificarStorage(listastorage)
-                }else if(usuario.recordIntentos>nuevoRecord){
-                    usuario.recordIntentos=nuevoRecord
+                } else if (usuario.recordIntentos > nuevoRecord) {
+                    usuario.recordIntentos = nuevoRecord
                     modificarStorage(listastorage)
                 }
             }
@@ -119,21 +119,21 @@ function verificarRecord(nuevoRecord, nombreUsuario){
     }
 }
 
-function buscarUsuario (nombreUsuario, lista){
-    for ( const usuario of lista){
-        if(usuario.nombre==nombreUsuario){
+function buscarUsuario(nombreUsuario, lista) {
+    for (const usuario of lista) {
+        if (usuario.nombre == nombreUsuario) {
             return true
         }
     }
     return false
 }
 
-function mejorRecord (nombre){
+function mejorRecord(nombre) {
     let listastorage = infoStorage()
     let record
-    for(const usuario of listastorage){
-        if(usuario.nombre==nombre){
-            record= usuario.recordIntentos
+    for (const usuario of listastorage) {        
+        if (usuario.nombre == nombre) {
+            record = usuario.recordIntentos
         }
     }
     return record
@@ -144,18 +144,19 @@ function verificarUsuario() {
     let boton = document.querySelector("#botonVerificar")
     boton.addEventListener("click", () => {
         let nombre = document.getElementById("inputNombre").value.toUpperCase();
-        let apellido = document.getElementById("inputApellido").value.toUpperCase(); 
-        let storageList = infoStorage()           
-        let verificacion = buscarUsuario(nombre, storageList)       
-        if (!verificacion) {
-            storageList.push(new Usuario(nombre, apellido));
-            modificarStorage(storageList)                   
-            crearTablero()
-        } else {
-            crearTablero()
-        }
+        let apellido = document.getElementById("inputApellido").value.toUpperCase();
+        let storageList = infoStorage()
+        let verificacion = buscarUsuario(nombre, storageList)
+        !verificacion?storageList.push(new Usuario(nombre, apellido))&&modificarStorage(storageList)&&crearTablero():crearTablero() //operador Ternario
+        // if (!verificacion) {
+        //     storageList.push(new Usuario(nombre, apellido));
+        //     modificarStorage(storageList)
+        //     crearTablero()
+        // } else {
+        //     crearTablero()
+        // }
     })
-}   
+}
 //crear tablero
 function crearTablero() {
     for (let i = 0; i < imagenesArray.length; i++) {
@@ -169,7 +170,7 @@ function crearTablero() {
 }
 
 //verificar concuerda
-function verificarQueConcuerda() {    
+function verificarQueConcuerda() {
     const tarjetas = document.querySelectorAll('img')
     const opcionUnoId = idTarjetaElegida[0]
     const opcionDosId = idTarjetaElegida[1]
@@ -196,20 +197,21 @@ function verificarQueConcuerda() {
     let name = document.getElementById("inputNombre").value.toUpperCase();    
     if (tarjetasGanadoras.length === imagenesArray.length / 2) {
         resultadoJuego.textContent = 'Felicitaciones! Has encontrado todas la parejas!'
-        verificarRecord(conteoIntentos, name)        
+        verificarRecord(conteoIntentos, name)
         record.innerHTML = `${mejorRecord(name)}`
     }
 }
 
 //Voltea tu tarjeta
-function voltearTarjeta() {    
+function voltearTarjeta() {
     let idTarjeta = this.getAttribute('id')
     tarjetaElegida.push(imagenesArray[idTarjeta].profesion)
     idTarjetaElegida.push(idTarjeta)
     this.setAttribute('src', imagenesArray[idTarjeta].imagen)
-    if (tarjetaElegida.length === 2) {
-        setTimeout(verificarQueConcuerda, 500)
-    }
+    tarjetaElegida.length === 2&&setTimeout(verificarQueConcuerda, 500) //Operador avanzado AND
+    // if (tarjetaElegida.length === 2) {
+    //     setTimeout(verificarQueConcuerda, 500)
+    // }
 }
 
 verificarUsuario()
