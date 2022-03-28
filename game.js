@@ -82,7 +82,6 @@ imagenesArray.sort(() => 0.5 - Math.random())
 let grilla = document.querySelector('.grilla')
 let resultadoJuego = document.querySelector('#resultado')
 let intentos = document.querySelector('#conteoIntentos')
-let record = document.querySelector("#recordPersonal")
 let listaUsuario = []
 let tarjetaElegida = []
 let idTarjetaElegida = []
@@ -196,9 +195,22 @@ function verificarQueConcuerda() {
     let conteoIntentos = tarjetasGanadoras.length + tarjetasEquivocadas.length
     let name = document.getElementById("inputNombre").value.toUpperCase();    
     if (tarjetasGanadoras.length === imagenesArray.length / 2) {
-        resultadoJuego.textContent = 'Felicitaciones! Has encontrado todas la parejas!'
         verificarRecord(conteoIntentos, name)
-        record.innerHTML = `${mejorRecord(name)}`
+        Swal.fire({
+            title: 'Felicitaciones! Has encontrado todas la parejas',
+            text:   'Tu record personal son:'+ mejorRecord(name) +" "+'intentos',
+            width: 600,
+            padding: '3em',
+            color: '#716add',
+            background: '#fff url(/imagenes/images.png)', 
+            backgroundSize: "cover",                                   
+            backdrop: `
+              rgba(0,0,123,0.4)
+              url("https://24.media.tumblr.com/901e8a124f307a1c1f45d4232d72970d/tumblr_mrfdktBp6G1sfn296o1_400.gif")
+              left top
+              no-repeat            `
+          })
+
     }
 }
 
