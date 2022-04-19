@@ -146,14 +146,7 @@ function verificarUsuario() {
         let apellido = document.getElementById("inputApellido").value.toUpperCase();
         let storageList = infoStorage()
         let verificacion = buscarUsuario(nombre, storageList)
-        !verificacion?storageList.push(new Usuario(nombre, apellido))&&modificarStorage(storageList)&&crearTablero():crearTablero() //operador Ternario
-        // if (!verificacion) {
-        //     storageList.push(new Usuario(nombre, apellido));
-        //     modificarStorage(storageList)
-        //     crearTablero()
-        // } else {
-        //     crearTablero()
-        // }
+        !verificacion?storageList.push(new Usuario(nombre, apellido))&&modificarStorage(storageList)&&crearTablero():crearTablero()     
     })
 }
 //crear tablero
@@ -220,10 +213,7 @@ function voltearTarjeta() {
     tarjetaElegida.push(imagenesArray[idTarjeta].profesion)
     idTarjetaElegida.push(idTarjeta)
     this.setAttribute('src', imagenesArray[idTarjeta].imagen)
-    tarjetaElegida.length === 2&&setTimeout(verificarQueConcuerda, 500) //Operador avanzado AND
-    // if (tarjetaElegida.length === 2) {
-    //     setTimeout(verificarQueConcuerda, 500)
-    // }
+    tarjetaElegida.length === 2&&setTimeout(verificarQueConcuerda, 500)    
 }
 
 verificarUsuario()
